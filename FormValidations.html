@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html ng-app="LoginApp">
+<head>
+    <title>Assignment 2</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <style type="text/css">
+        .err-style {
+            color: orangered;
+        }
+    </style>    
+    <meta charset="utf-8" />
+</head>
+<body ng-controller="LoginCtrl" class="well">
+    <h1 style="text-align:center">User Registration Form</h1>
+   
+        <form name="form" ng-submit="SubmitForm(form.$valid)" novalidate>
+            <div class="form-group">
+                <input class="form-control" 
+                       style="width:auto"
+                       type="text" 
+                       name="username"
+                       ng-model="user.username" 
+                       placeholder="User Name" 
+                       required />
+                <div class="err-style" ng-show="form.$submitted || form.username.$touched">
+                    <span ng-show="form.username.$error.required">Enter the User Name</span>
+                </div>           
+            </div>
+            <hr />
+            <div class="form-group">
+                <input class="form-control" 
+                       style="width:auto"
+                       type="email" 
+                       name="email" 
+                       ng-model="user.email" 
+                       placeholder="Email Address" 
+                       required />
+                <div class="err-style" ng-show="form.$submitted || form.email.$touched">
+                    <span ng-show="form.email.$error.required">Enter the Email.</span>
+                    <span ng-show="form.email.$error.email">This is not a valid email.</span>
+                </div>              
+            </div>
+            <hr />
+            <div class="form-group">
+                <input class="form-control"
+                       style="width:auto"
+                       type="text" 
+                       placeholder="Mobile (+XXXXX-XXXXX)" 
+                       name="mobile" 
+                       ng-pattern="phoneNumber" 
+                       ng-model="user.mobile" 
+                       ng-required="!user.email"/> 
+                <div class="err-style" ng-show="form.$submitted || form.mobile.$touched">
+                    <span ng-show="form.mobile.$error.required">Enter the Mobile.</span>
+                    <span class="error" ng-show="form.mobile.$error.pattern">Please Enter the Phone no matching  pattern [+91-xxx-xxxxx || 91-xxx-xxxxx]</span>
+                </div>
+            </div>
+            <hr />
+            <input type="button" value="Save" class="btn btn-primary" ng-click="ShowHide()" />          
+            <div ng-hide="IsHidden">
+                <p class="lead">You have entered the following details</p>
+                User Name: <span ng-bind="user.username"></span><br />
+                Email: <span ng-bind="user.email"></span><br />
+                Mobile: <span ng-bind="user.mobile"></span><br />
+                <input class="btn btn-primary" type="submit" value="Submit" />
+            </div>
+        </form>
+ 
+    <script type="text/javascript">
+        angular.module('LoginApp', [])
+        .controller('LoginCtrl', function ($scope) {
+            $scope.phoneNumber = /^\+?\d{2}[- ]?\d{3}[- ]?\d{5}$/;
+
+            $scope.IsHidden = true;
+
+            $scope.ShowHide = function () {
+                $scope.IsHidden = $scope.IsHidden ? false : true;
+            }
+
+            $scope.SubmitForm = function (form) {
+                if (form) {
+                    alert('Successfully submitted the user !');
+                }
+                else {
+                    alert('ERROR !');
+                }
+            };
+        });
+    </script>
+</body>
+</html>
