@@ -1,2 +1,2 @@
-# SkillSpeed
-AngularJS code repository created as a part of SkillSpeed's AngularJS course.
+# AngularJS Concepts
+AngularJS code repository containing the implementation of the baisc concepts of AngularJS.
