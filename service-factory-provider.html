@@ -1,0 +1,87 @@
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<title>Service-Factory-Provider</title>
+<script type="text/javascript">
+angular.module("myapp",[])
+.service('myService', function() {
+    this.helloFunction = function() {
+        return "Hello from service !"
+    };
+})
+.factory('myFactory', function() {
+    return {
+            helloFunction: function () {
+            return "Hello from factory !"
+        }
+    };
+})
+.provider('my', function() {
+    // Injecting a service or factory is not allowed inside the provider function. You can only do it in the "$get" method.
+    this.name = 'Default';
+    this.$get = function() {
+        var name = this.name;
+        return {
+                helloFunction: function () {
+                return "Hello " + name + "!"
+               }
+        }
+    };
+
+    this.setName = function(name) {
+        this.name = name;
+    };
+})
+.config(function(myProvider){
+    myProvider.setName('from Provider');
+})
+.controller('myCtrl', function ($scope, myService, myFactory, my) {
+    $scope.usingService = function () {
+        $scope.serviceResult = myService.helloFunction();
+        alert($scope.serviceResult);
+    };
+
+    $scope.usingFactory = function () {
+        $scope.factoryResult = myFactory.helloFunction();
+        alert($scope.factoryResult);
+    };
+
+    $scope.usingProvider = function () {
+        $scope.providerResult = my.helloFunction();
+        alert($scope.providerResult);
+    };
+
+});
+</script>
+</head>
+<body class="well" ng-app="myapp" ng-controller="myCtrl">
+    <div>
+        <h3 class="h3" style="text-align:center">Service - Factory - Provider Implementation</h3>
+
+        <div class="panel panel-primary" style="width:1200px">
+            <div class="panel-heading">Using Service</div>
+            <div class="h5" style="text-align:center">  On click of the below button, an alert window is displayed which fetches its content from a service: myService</div>
+               <div class="panel-body" style="text-align:center"><input type="button" class="btn btn-primary" value="Service" ng-click="usingService()" />
+            </div>
+        </div>
+           
+        <div class="panel panel-success" style="width:1200px">
+            <div class="panel-heading">Using Factory</div>
+            <div class="h5" style="text-align:center">  On click of the below button, an alert window is displayed which fetches its content from a factory: myFactory</div>
+            <div class="panel-body" style="text-align:center">
+                <input type="button" class="btn btn-success" value="Factory" ng-click="usingFactory()" />
+            </div>
+        </div>
+        
+        <div class="panel panel-warning" style="width:1200px">           
+            <div class="panel-heading">Using Provider</div>
+            <div class="h5" style="text-align:center">  On click of the below button, an alert window is displayed which fetches its content from a provider: myProvider</div>
+            <div class="panel-body" style="text-align:center">
+            <input type="button" class="btn btn-warning" value="Provider" ng-click="usingProvider()" /></div>   
+          </div>
+        </div>
+</body>
+</html>
